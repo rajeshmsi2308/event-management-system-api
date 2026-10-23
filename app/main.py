@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 from app.database import Base, engine
 from app import models  # noqa: F401  (registers all tables with Base)
-from app.routers import auth, users, events
+from app.routers import auth, users, events, tickets
 
 app = FastAPI(
     title="Event Management System API",
@@ -16,6 +16,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(events.router)
+app.include_router(tickets.router)
 
 
 @app.get("/", tags=["Health"])
