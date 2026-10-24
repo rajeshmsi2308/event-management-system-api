@@ -1,13 +1,16 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 from app.database import Base, engine
 from app import models  # noqa: F401  (registers all tables with Base)
+from app.docs_page import SWAGGER_HTML
 from app.routers import auth, users, events, tickets, bookings, payments, notifications, admin
 
 app = FastAPI(
     title="Event Management System API",
     description="Register, browse events, book tickets, simulate payments and manage bookings.",
     version="1.0.0",
+    docs_url=None,  # we serve our own themed /docs page below
 )
 
 # Creates any missing tables on startup (existing ones are untouched).
@@ -26,3 +29,8 @@ app.include_router(admin.router)
 @app.get("/", tags=["Health"])
 def root():
     return {"message": "Event Management System API is running", "docs": "/docs"}
+
+
+@app.get("/docs", include_in_schema=False)
+def custom_docs():
+    return HTMLResponse(SWAGGER_HTML)
