@@ -55,12 +55,7 @@
           "name": "Register organizer",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/auth/register",
               "host": [
@@ -73,13 +68,29 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Priya Organizer\",\n  \"email\": \"org{{run_id}}@test.com\",\n  \"password\": \"pass12345\",\n  \"role\": \"ORGANIZER\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Priya Organizer",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "org{{run_id}}@test.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "pass12345",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "ORGANIZER",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "noauth"
@@ -102,12 +113,7 @@
           "name": "Register customer (new email)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/auth/register",
               "host": [
@@ -120,13 +126,29 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Ravi Customer\",\n  \"email\": \"cust{{run_id}}@test.com\",\n  \"password\": \"pass12345\",\n  \"role\": \"CUSTOMER\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Ravi Customer",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "cust{{run_id}}@test.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "pass12345",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "CUSTOMER",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "noauth"
@@ -149,12 +171,7 @@
           "name": "Register second customer",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/auth/register",
               "host": [
@@ -167,13 +184,29 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Other Customer\",\n  \"email\": \"other{{run_id}}@test.com\",\n  \"password\": \"pass12345\",\n  \"role\": \"CUSTOMER\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Other Customer",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "other{{run_id}}@test.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "pass12345",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "CUSTOMER",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "noauth"
@@ -195,12 +228,7 @@
           "name": "Register existing email (rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/auth/register",
               "host": [
@@ -213,13 +241,29 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Ravi Again\",\n  \"email\": \"cust{{run_id}}@test.com\",\n  \"password\": \"pass12345\",\n  \"role\": \"CUSTOMER\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Ravi Again",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "cust{{run_id}}@test.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "pass12345",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "CUSTOMER",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "noauth"
@@ -238,15 +282,10 @@
           ]
         },
         {
-          "name": "Register as ADMIN (blocked)",
+          "name": "Register as ADMIN (not in dropdown, rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/auth/register",
               "host": [
@@ -259,13 +298,29 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Hacker\",\n  \"email\": \"hack{{run_id}}@test.com\",\n  \"password\": \"pass12345\",\n  \"role\": \"ADMIN\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Hacker",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "hack{{run_id}}@test.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "pass12345",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "ADMIN",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "noauth"
@@ -277,7 +332,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status is 403\", () => pm.response.to.have.status(403));"
+                  "pm.test(\"Status is 422\", () => pm.response.to.have.status(422));"
                 ]
               }
             }
@@ -572,12 +627,7 @@
           "name": "Create event without auth (rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events",
               "host": [
@@ -589,13 +639,49 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Tech Meetup {{run_id}}\",\n  \"description\": \"Python talks and networking\",\n  \"category\": \"Technology\",\n  \"venue\": \"Hitex, Hyderabad\",\n  \"start_time\": \"2030-12-05T18:00:00\",\n  \"end_time\": \"2030-12-05T21:00:00\",\n  \"ticket_price\": 499.0,\n  \"capacity\": 100\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "Tech Meetup {{run_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Python talks and networking",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "Technology",
+                  "type": "text"
+                },
+                {
+                  "key": "venue",
+                  "value": "Hitex, Hyderabad",
+                  "type": "text"
+                },
+                {
+                  "key": "start_time",
+                  "value": "2030-12-05T18:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "end_time",
+                  "value": "2030-12-05T21:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_price",
+                  "value": "499.0",
+                  "type": "text"
+                },
+                {
+                  "key": "capacity",
+                  "value": "100",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "noauth"
@@ -617,12 +703,7 @@
           "name": "Customer creates event (denied)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events",
               "host": [
@@ -634,13 +715,49 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Tech Meetup {{run_id}}\",\n  \"description\": \"Python talks and networking\",\n  \"category\": \"Technology\",\n  \"venue\": \"Hitex, Hyderabad\",\n  \"start_time\": \"2030-12-05T18:00:00\",\n  \"end_time\": \"2030-12-05T21:00:00\",\n  \"ticket_price\": 499.0,\n  \"capacity\": 100\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "Tech Meetup {{run_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Python talks and networking",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "Technology",
+                  "type": "text"
+                },
+                {
+                  "key": "venue",
+                  "value": "Hitex, Hyderabad",
+                  "type": "text"
+                },
+                {
+                  "key": "start_time",
+                  "value": "2030-12-05T18:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "end_time",
+                  "value": "2030-12-05T21:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_price",
+                  "value": "499.0",
+                  "type": "text"
+                },
+                {
+                  "key": "capacity",
+                  "value": "100",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -669,12 +786,7 @@
           "name": "Create event with capacity 0 (validation)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events",
               "host": [
@@ -686,13 +798,49 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Tech Meetup {{run_id}}\",\n  \"description\": \"Python talks and networking\",\n  \"category\": \"Technology\",\n  \"venue\": \"Hitex, Hyderabad\",\n  \"start_time\": \"2030-12-05T18:00:00\",\n  \"end_time\": \"2030-12-05T21:00:00\",\n  \"ticket_price\": 499.0,\n  \"capacity\": 0\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "Tech Meetup {{run_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Python talks and networking",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "Technology",
+                  "type": "text"
+                },
+                {
+                  "key": "venue",
+                  "value": "Hitex, Hyderabad",
+                  "type": "text"
+                },
+                {
+                  "key": "start_time",
+                  "value": "2030-12-05T18:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "end_time",
+                  "value": "2030-12-05T21:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_price",
+                  "value": "499.0",
+                  "type": "text"
+                },
+                {
+                  "key": "capacity",
+                  "value": "0",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -721,12 +869,7 @@
           "name": "Create event",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events",
               "host": [
@@ -738,13 +881,49 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"title\": \"Tech Meetup {{run_id}}\",\n  \"description\": \"Python talks and networking\",\n  \"category\": \"Technology\",\n  \"venue\": \"Hitex, Hyderabad\",\n  \"start_time\": \"2030-12-05T18:00:00\",\n  \"end_time\": \"2030-12-05T21:00:00\",\n  \"ticket_price\": 499.0,\n  \"capacity\": 100\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "title",
+                  "value": "Tech Meetup {{run_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Python talks and networking",
+                  "type": "text"
+                },
+                {
+                  "key": "category",
+                  "value": "Technology",
+                  "type": "text"
+                },
+                {
+                  "key": "venue",
+                  "value": "Hitex, Hyderabad",
+                  "type": "text"
+                },
+                {
+                  "key": "start_time",
+                  "value": "2030-12-05T18:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "end_time",
+                  "value": "2030-12-05T21:00:00",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_price",
+                  "value": "499.0",
+                  "type": "text"
+                },
+                {
+                  "key": "capacity",
+                  "value": "100",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -775,12 +954,7 @@
           "name": "Publish event",
           "request": {
             "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/{{event_id}}/status",
               "host": [
@@ -794,13 +968,14 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"PUBLISHED\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "status",
+                  "value": "PUBLISHED",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -830,12 +1005,7 @@
           "name": "Invalid status change (rejected)",
           "request": {
             "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/{{event_id}}/status",
               "host": [
@@ -849,13 +1019,14 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"DRAFT\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "status",
+                  "value": "DRAFT",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -985,12 +1156,7 @@
           "name": "Create Regular tickets (5)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/{{event_id}}/ticket-types",
               "host": [
@@ -1004,13 +1170,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Regular\",\n  \"price\": 499.0,\n  \"total_quantity\": 5\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Regular",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "499.0",
+                  "type": "text"
+                },
+                {
+                  "key": "total_quantity",
+                  "value": "5",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1040,12 +1217,7 @@
           "name": "Create VIP tickets",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/{{event_id}}/ticket-types",
               "host": [
@@ -1059,13 +1231,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"VIP\",\n  \"price\": 1499.0,\n  \"total_quantity\": 20\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "VIP",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "1499.0",
+                  "type": "text"
+                },
+                {
+                  "key": "total_quantity",
+                  "value": "20",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1094,12 +1277,7 @@
           "name": "Exceed event capacity (rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/{{event_id}}/ticket-types",
               "host": [
@@ -1113,13 +1291,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Student\",\n  \"price\": 199.0,\n  \"total_quantity\": 500\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Student",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "199.0",
+                  "type": "text"
+                },
+                {
+                  "key": "total_quantity",
+                  "value": "500",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1148,12 +1337,7 @@
           "name": "Duplicate ticket name (rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/events/{{event_id}}/ticket-types",
               "host": [
@@ -1167,13 +1351,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Regular\",\n  \"price\": 399.0,\n  \"total_quantity\": 1\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Regular",
+                  "type": "text"
+                },
+                {
+                  "key": "price",
+                  "value": "399.0",
+                  "type": "text"
+                },
+                {
+                  "key": "total_quantity",
+                  "value": "1",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1241,12 +1436,7 @@
           "name": "Book within availability",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/bookings",
               "host": [
@@ -1258,13 +1448,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"event_id\": \"{{event_id}}\",\n  \"items\": [\n    {\n      \"ticket_type_id\": \"{{ticket_id}}\",\n      \"quantity\": 2\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "event_id",
+                  "value": "{{event_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_type_id",
+                  "value": "{{ticket_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "quantity",
+                  "value": "2",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1297,12 +1498,7 @@
           "name": "Book more than available (rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/bookings",
               "host": [
@@ -1314,13 +1510,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"event_id\": \"{{event_id}}\",\n  \"items\": [\n    {\n      \"ticket_type_id\": \"{{ticket_id}}\",\n      \"quantity\": 4\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "event_id",
+                  "value": "{{event_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_type_id",
+                  "value": "{{ticket_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "quantity",
+                  "value": "4",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1349,12 +1556,7 @@
           "name": "Organizer tries to book (denied)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/bookings",
               "host": [
@@ -1366,13 +1568,24 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"event_id\": \"{{event_id}}\",\n  \"items\": [\n    {\n      \"ticket_type_id\": \"{{ticket_id}}\",\n      \"quantity\": 1\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "event_id",
+                  "value": "{{event_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "ticket_type_id",
+                  "value": "{{ticket_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "quantity",
+                  "value": "1",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1524,12 +1737,7 @@
           "name": "Failed payment",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/payments",
               "host": [
@@ -1541,13 +1749,19 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"booking_id\": \"{{booking_id}}\",\n  \"outcome\": \"FAILED\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "booking_id",
+                  "value": "{{booking_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "outcome",
+                  "value": "FAILED",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1617,12 +1831,7 @@
           "name": "Successful payment",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/payments",
               "host": [
@@ -1634,13 +1843,19 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"booking_id\": \"{{booking_id}}\",\n  \"outcome\": \"SUCCESS\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "booking_id",
+                  "value": "{{booking_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "outcome",
+                  "value": "SUCCESS",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",
@@ -1670,12 +1885,7 @@
           "name": "Duplicate payment (rejected)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/api/payments",
               "host": [
@@ -1687,13 +1897,19 @@
               ]
             },
             "body": {
-              "mode": "raw",
-              "raw": "{\n  \"booking_id\": \"{{booking_id}}\",\n  \"outcome\": \"SUCCESS\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "booking_id",
+                  "value": "{{booking_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "outcome",
+                  "value": "SUCCESS",
+                  "type": "text"
                 }
-              }
+              ]
             },
             "auth": {
               "type": "bearer",

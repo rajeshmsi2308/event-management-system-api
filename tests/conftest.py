@@ -27,7 +27,7 @@ def client():
 # ---------- helpers used by the tests ----------
 
 def register(client, email, role="CUSTOMER", password="pass12345", name="Test User"):
-    return client.post("/api/auth/register", json={"name": name, "email": email, "password": password, "role": role})
+    return client.post("/api/auth/register", data={"name": name, "email": email, "password": password, "role": role})
 
 
 def login(client, email, password="pass12345"):
@@ -59,11 +59,11 @@ def event_payload(**overrides):
 
 def published_event_with_tickets(client, organizer_headers, regular_qty=5, **event_overrides):
     """Creates a published event with one 'Regular' ticket type. Returns (event_id, ticket_type_id)."""
-    event = client.post("/api/events", json=event_payload(**event_overrides), headers=organizer_headers).json()
+    event = client.post("/api/events", data=event_payload(**event_overrides), headers=organizer_headers).json()
     ticket = client.post(
         f"/api/events/{event['id']}/ticket-types",
-        json={"name": "Regular", "price": 499.00, "total_quantity": regular_qty},
+        data={"name": "Regular", "price": 499.00, "total_quantity": regular_qty},
         headers=organizer_headers,
     ).json()
-    client.patch(f"/api/events/{event['id']}/status", json={"status": "PUBLISHED"}, headers=organizer_headers)
+    client.patch(f"/api/events/{event['id']}/status", data={"status": "PUBLISHED"}, headers=organizer_headers)
     return event["id"], ticket["id"]
