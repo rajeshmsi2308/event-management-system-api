@@ -1,7 +1,9 @@
-from datetime import datetime
+import math
+from datetime import date, datetime, time
+from decimal import Decimal
 
 from fastapi import HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import select, func, or_
 from sqlalchemy.orm import Session
 
 from app.models import Event, EventStatus, User, UserRole
@@ -13,6 +15,14 @@ ALLOWED_TRANSITIONS = {
     EventStatus.PUBLISHED: {EventStatus.CANCELLED, EventStatus.COMPLETED},
     EventStatus.CANCELLED: set(),
     EventStatus.COMPLETED: set(),
+}
+
+# Columns the user is allowed to sort by
+SORT_COLUMNS = {
+    "start_time": Event.start_time,
+    "ticket_price": Event.ticket_price,
+    "title": Event.title,
+    "created_at": Event.created_at,
 }
 
 
@@ -36,9 +46,57 @@ def create_event(db: Session, data: EventCreate, organizer: User) -> Event:
     return event
 
 
-def list_published_events(db: Session) -> list[Event]:
-    stmt = select(Event).where(Event.status == EventStatus.PUBLISHED).order_by(Event.start_time)
-    return list(db.scalars(stmt))
+def search_events(
+    db: Session,
+    q: str | None = None,
+    category: str | None = None,
+    venue: str | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
+    min_price: Decimal | None = None,
+    max_price: Decimal | None = None,
+    sort_by: str = "start_time",
+    order: str = "asc",
+    page: int = 1,
+    size: int = 10,
+) -> dict:
+    """Public search: only PUBLISHED events."""
+    if start_date and end_date and start_date > end_date:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "start_date cannot be after end_date")
+    if min_price is not None and max_price is not None and min_price > max_price:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "min_price cannot be more than max_price")
+
+    filters = [Event.status == EventStatus.PUBLISHED]
+    if q:
+        like = f"%{q.strip()}%"
+        filters.append(or_(Event.title.ilike(like), Event.description.ilike(like), Event.venue.ilike(like)))
+    if category:
+        filters.append(Event.category == category.strip())
+    if venue:
+        filters.append(Event.venue.ilike(f"%{venue.strip()}%"))
+    if start_date:
+        filters.append(Event.start_time >= datetime.combine(start_date, time.min))
+    if end_date:
+        filters.append(Event.start_time <= datetime.combine(end_date, time.max))
+    if min_price is not None:
+        filters.append(Event.ticket_price >= min_price)
+    if max_price is not None:
+        filters.append(Event.ticket_price <= max_price)
+
+    total = db.scalar(select(func.count(Event.id)).where(*filters))
+
+    column = SORT_COLUMNS[sort_by]
+    ordering = column.desc() if order == "desc" else column.asc()
+    stmt = (
+        select(Event)
+        .where(*filters)
+        .order_by(ordering, Event.id)
+        .offset((page - 1) * size)
+        .limit(size)
+    )
+    items = list(db.scalars(stmt))
+
+    return {"items": items, "total": total, "page": page, "size": size, "pages": math.ceil(total / size) if total else 0}
 
 
 def list_my_events(db: Session, user: User) -> list[Event]:
