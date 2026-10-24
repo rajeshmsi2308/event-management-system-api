@@ -6,7 +6,9 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.models import Booking, BookingItem, EventStatus, TicketType, User, UserRole
+from app.models import (
+    Booking, BookingItem, BookingStatus, Event, EventStatus, PaymentStatus, TicketType, User, UserRole,
+)
 from app.schemas.booking import BookingCreate
 from app.services.event_service import get_event_or_404
 from app.services.notification_service import notify
@@ -89,3 +91,68 @@ def ensure_can_view(booking: Booking, user: User) -> None:
 def list_my_bookings(db: Session, user: User) -> list[Booking]:
     stmt = select(Booking).where(Booking.customer_id == user.id).order_by(Booking.created_at.desc())
     return list(db.scalars(stmt))
+
+
+# ---------------- Cancellation ----------------
+
+def _release_booking(db: Session, booking: Booking, reason: str) -> None:
+    """Gives seats back, refunds a successful payment, marks the booking CANCELLED. Caller commits."""
+    ticket_ids = sorted(item.ticket_type_id for item in booking.items)
+    tickets = db.scalars(
+        select(TicketType).where(TicketType.id.in_(ticket_ids)).order_by(TicketType.id).with_for_update()
+    ).all()
+    ticket_map = {t.id: t for t in tickets}
+
+    for item in booking.items:
+        ticket_map[item.ticket_type_id].sold_quantity -= item.quantity  # restore seats
+
+    refunded = False
+    for payment in booking.payments:
+        if payment.status == PaymentStatus.SUCCESS:
+            payment.status = PaymentStatus.REFUNDED
+            refunded = True
+
+    booking.status = BookingStatus.CANCELLED
+    booking.cancelled_at = datetime.now()
+
+    message = f"Booking {booking.booking_reference} was cancelled ({reason})."
+    if refunded:
+        message += f" Rs.{booking.total_amount} has been refunded."
+    notify(db, booking.customer_id, "Booking cancelled", message)
+
+
+def cancel_booking(db: Session, booking_id: int, user: User) -> Booking:
+    try:
+        # Lock the booking so two cancel requests can't both restore seats
+        booking = db.scalar(select(Booking).where(Booking.id == booking_id).with_for_update())
+        if not booking:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Booking not found")
+        if user.role != UserRole.ADMIN and booking.customer_id != user.id:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "You can only cancel your own bookings")
+        if booking.status == BookingStatus.CANCELLED:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Booking is already cancelled")
+        if booking.event.start_time <= datetime.now():
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Cannot cancel after the event has started")
+
+        reason = "cancelled by admin" if user.role == UserRole.ADMIN else "cancelled by you"
+        _release_booking(db, booking, reason)
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
+    db.refresh(booking)
+    return booking
+
+
+def cancel_event_bookings(db: Session, event: Event) -> int:
+    """Used when an event is cancelled: cancels and refunds every active booking. Caller commits."""
+    bookings = db.scalars(
+        select(Booking)
+        .where(Booking.event_id == event.id, Booking.status != BookingStatus.CANCELLED)
+        .order_by(Booking.id)
+        .with_for_update()
+    ).all()
+    for booking in bookings:
+        _release_booking(db, booking, f"event '{event.title}' was cancelled by the organizer")
+    return len(bookings)

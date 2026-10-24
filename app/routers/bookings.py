@@ -25,3 +25,9 @@ def get_booking(booking_id: int, db: Session = Depends(get_db), user: User = Dep
     booking = booking_service.get_booking_or_404(db, booking_id)
     booking_service.ensure_can_view(booking, user)
     return booking
+
+
+@router.post("/{booking_id}/cancel", response_model=BookingOut)
+def cancel_booking(booking_id: int, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """Customer cancels own booking; Admin can cancel any."""
+    return booking_service.cancel_booking(db, booking_id, user)

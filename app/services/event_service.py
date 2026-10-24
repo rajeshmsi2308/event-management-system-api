@@ -73,8 +73,17 @@ def change_status(db: Session, event: Event, new_status: EventStatus) -> Event:
             status.HTTP_400_BAD_REQUEST,
             f"Cannot change status from {event.status.value} to {new_status.value}",
         )
-    event.status = new_status
-    db.commit()
+    try:
+        if new_status == EventStatus.CANCELLED:
+            # Imported here to avoid a circular import (booking_service imports this file)
+            from app.services.booking_service import cancel_event_bookings
+            cancel_event_bookings(db, event)
+        event.status = new_status
+        db.commit()  # status change + all cancellations/refunds saved together
+    except Exception:
+        db.rollback()
+        raise
+
     db.refresh(event)
     return event
 
