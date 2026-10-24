@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.models.enums import EventStatus
+from app.models.enums import EventCategory, EventStatus
 
 
 def _naive(v: datetime | None) -> datetime | None:
@@ -12,12 +12,14 @@ def _naive(v: datetime | None) -> datetime | None:
 
 
 class EventCreate(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)  # store "Technology", not the enum object
+
     title: str = Field(min_length=3, max_length=200)
     description: str | None = None
-    category: str = Field(min_length=2, max_length=50)
+    category: EventCategory  # dropdown
     venue: str = Field(min_length=2, max_length=200)
-    start_time: datetime
-    end_time: datetime
+    start_time: datetime = Field(description="YYYY-MM-DDTHH:MM, e.g. 2026-12-05T18:00")
+    end_time: datetime = Field(description="YYYY-MM-DDTHH:MM, e.g. 2026-12-05T21:00")
     ticket_price: Decimal = Field(ge=0, max_digits=10, decimal_places=2)
     capacity: int = Field(gt=0)
 
@@ -33,9 +35,11 @@ class EventCreate(BaseModel):
 
 
 class EventUpdate(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
+
     title: str | None = Field(default=None, min_length=3, max_length=200)
     description: str | None = None
-    category: str | None = Field(default=None, min_length=2, max_length=50)
+    category: EventCategory | None = None  # dropdown
     venue: str | None = Field(default=None, min_length=2, max_length=200)
     start_time: datetime | None = None
     end_time: datetime | None = None

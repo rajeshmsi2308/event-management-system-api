@@ -2,9 +2,13 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.models.enums import TicketName
+
 
 class TicketTypeCreate(BaseModel):
-    name: str = Field(min_length=2, max_length=50)  # Regular / Standard / VIP
+    model_config = ConfigDict(use_enum_values=True)
+
+    name: TicketName  # dropdown: Regular / Standard / VIP ...
     price: Decimal = Field(ge=0, max_digits=10, decimal_places=2)
     total_quantity: int = Field(gt=0)
 

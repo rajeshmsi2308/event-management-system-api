@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from app.models.enums import BookingStatus
+from app.models.enums import BookingStatus, TicketQuantity
 
 
 class BookingItemCreate(BaseModel):
@@ -21,6 +21,19 @@ class BookingCreate(BaseModel):
         if len(ids) != len(set(ids)):
             raise ValueError("Each ticket type can appear only once in a booking")
         return self
+
+
+class BookingForm(BaseModel):
+    """What the customer fills in Swagger: one ticket type per booking."""
+    event_id: int = Field(gt=0)
+    ticket_type_id: int = Field(gt=0)
+    quantity: TicketQuantity = Field(default=1, description="Number of tickets (1 to 10)")  # dropdown
+
+    def to_booking_create(self) -> BookingCreate:
+        return BookingCreate(
+            event_id=self.event_id,
+            items=[BookingItemCreate(ticket_type_id=self.ticket_type_id, quantity=int(self.quantity))],
+        )
 
 
 class BookingItemOut(BaseModel):

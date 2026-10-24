@@ -12,8 +12,6 @@ def get_user_by_email(db: Session, email: str) -> User | None:
 
 
 def register_user(db: Session, data: UserRegister) -> User:
-    if data.role == UserRole.ADMIN:
-        raise HTTPException(status.HTTP_403_FORBIDDEN, "Admin accounts cannot be self-registered")
     if get_user_by_email(db, data.email):
         raise HTTPException(status.HTTP_409_CONFLICT, "Email is already registered")
 
@@ -21,7 +19,7 @@ def register_user(db: Session, data: UserRegister) -> User:
         name=data.name.strip(),
         email=data.email.lower(),
         hashed_password=hash_password(data.password),
-        role=data.role,
+        role=UserRole(data.role.value),  # SignupRole -> UserRole (never ADMIN)
     )
     db.add(user)
     db.commit()
