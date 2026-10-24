@@ -1,18 +1,20 @@
-from fastapi import APIRouter, Depends, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Form, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.dependencies.auth import get_current_user, require_roles
 from app.models import User, UserRole
-from app.schemas.booking import BookingCreate, BookingOut
+from app.schemas.booking import BookingForm, BookingOut
 from app.services import booking_service
 
 router = APIRouter(prefix="/api/bookings", tags=["Bookings"])
 
 
 @router.post("", response_model=BookingOut, status_code=status.HTTP_201_CREATED)
-def create_booking(data: BookingCreate, db: Session = Depends(get_db), user: User = Depends(require_roles(UserRole.CUSTOMER))):
-    return booking_service.create_booking(db, data, user)
+def create_booking(data: Annotated[BookingForm, Form()], db: Session = Depends(get_db), user: User = Depends(require_roles(UserRole.CUSTOMER))):
+    return booking_service.create_booking(db, data.to_booking_create(), user)
 
 
 @router.get("/me", response_model=list[BookingOut])

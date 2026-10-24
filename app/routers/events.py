@@ -1,13 +1,14 @@
 from datetime import date
 from decimal import Decimal
-from typing import Literal
+from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.dependencies.auth import require_roles
 from app.models import EventStatus, User, UserRole
+from app.models.enums import EventCategory
 from app.schemas.common import Page
 from app.schemas.event import EventCreate, EventUpdate, EventStatusUpdate, EventOut
 from app.services import event_service
@@ -18,14 +19,14 @@ organizer_or_admin = require_roles(UserRole.ORGANIZER, UserRole.ADMIN)
 
 
 @router.post("", response_model=EventOut, status_code=status.HTTP_201_CREATED)
-def create_event(data: EventCreate, db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
+def create_event(data: Annotated[EventCreate, Form()], db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
     return event_service.create_event(db, data, user)
 
 
 @router.get("", response_model=Page[EventOut])
 def search_events(
     q: str | None = Query(None, description="Keyword in title, description or venue"),
-    category: str | None = None,
+    category: EventCategory | None = Query(None, description="Pick a category"),
     venue: str | None = None,
     start_date: date | None = Query(None, description="Events starting on or after (YYYY-MM-DD)"),
     end_date: date | None = Query(None, description="Events starting on or before (YYYY-MM-DD)"),
@@ -39,7 +40,7 @@ def search_events(
 ):
     """Public: search, filter, sort and paginate PUBLISHED events."""
     return event_service.search_events(
-        db, q, category, venue, start_date, end_date, min_price, max_price, sort_by, order, page, size
+        db, q, category.value if category else None, venue, start_date, end_date, min_price, max_price, sort_by, order, page, size
     )
 
 
@@ -59,14 +60,14 @@ def get_event(event_id: int, db: Session = Depends(get_db)):
 
 
 @router.patch("/{event_id}", response_model=EventOut)
-def update_event(event_id: int, data: EventUpdate, db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
+def update_event(event_id: int, data: Annotated[EventUpdate, Form()], db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
     event = event_service.get_event_or_404(db, event_id)
     event_service.ensure_can_manage(event, user)
     return event_service.update_event(db, event, data)
 
 
 @router.patch("/{event_id}/status", response_model=EventOut)
-def update_status(event_id: int, data: EventStatusUpdate, db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
+def update_status(event_id: int, data: Annotated[EventStatusUpdate, Form()], db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
     event = event_service.get_event_or_404(db, event_id)
     event_service.ensure_can_manage(event, user)
     return event_service.change_status(db, event, data.status)

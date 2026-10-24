@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Form, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -13,7 +15,7 @@ organizer_or_admin = require_roles(UserRole.ORGANIZER, UserRole.ADMIN)
 
 
 @router.post("/events/{event_id}/ticket-types", response_model=TicketTypeOut, status_code=status.HTTP_201_CREATED)
-def create_ticket_type(event_id: int, data: TicketTypeCreate, db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
+def create_ticket_type(event_id: int, data: Annotated[TicketTypeCreate, Form()], db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
     return ticket_service.create_ticket_type(db, event_id, data, user)
 
 
@@ -24,7 +26,7 @@ def list_ticket_types(event_id: int, db: Session = Depends(get_db)):
 
 
 @router.patch("/ticket-types/{ticket_type_id}", response_model=TicketTypeOut)
-def update_ticket_type(ticket_type_id: int, data: TicketTypeUpdate, db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
+def update_ticket_type(ticket_type_id: int, data: Annotated[TicketTypeUpdate, Form()], db: Session = Depends(get_db), user: User = Depends(organizer_or_admin)):
     ticket_type = ticket_service.get_ticket_type_or_404(db, ticket_type_id)
     return ticket_service.update_ticket_type(db, ticket_type, data, user)
 

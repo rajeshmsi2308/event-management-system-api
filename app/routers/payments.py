@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Form, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -11,7 +13,7 @@ router = APIRouter(prefix="/api/payments", tags=["Payments"])
 
 
 @router.post("", response_model=PaymentOut, status_code=status.HTTP_201_CREATED)
-def make_payment(data: PaymentCreate, db: Session = Depends(get_db), user: User = Depends(require_roles(UserRole.CUSTOMER))):
+def make_payment(data: Annotated[PaymentCreate, Form()], db: Session = Depends(get_db), user: User = Depends(require_roles(UserRole.CUSTOMER))):
     return payment_service.process_payment(db, data, user)
 
 
