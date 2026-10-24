@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.models import Booking, BookingItem, EventStatus, TicketType, User, UserRole
 from app.schemas.booking import BookingCreate
 from app.services.event_service import get_event_or_404
+from app.services.notification_service import notify
 
 
 def _generate_reference(db: Session) -> str:
@@ -62,7 +63,9 @@ def create_booking(db: Session, data: BookingCreate, customer: User) -> Booking:
 
         booking.total_amount = total
         db.add(booking)
-        db.commit()  # everything saved together, locks released
+        notify(db, customer.id, "Booking created",
+               f"Booking {booking.booking_reference} for {event.title} is reserved. Total Rs.{total}. Please complete payment.")
+        db.commit()  # booking, seats and notification saved together, locks released
     except Exception:
         db.rollback()  # nothing is saved if any check fails
         raise
