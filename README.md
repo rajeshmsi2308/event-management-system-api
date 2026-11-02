@@ -38,7 +38,7 @@ Built with **FastAPI**, **MySQL**, **SQLAlchemy ORM**, **Pydantic**, **JWT** and
 ## Project Structure
 
 ```
-event_management_api/
+event-management-system-api/
 |-- app/
 |   |-- main.py              # FastAPI app and routers
 |   |-- config.py            # Settings loaded from .env
@@ -73,8 +73,8 @@ Money is stored as `DECIMAL`, emails and booking references are unique, and all 
 
 ### 2. Clone and open the project
 ```powershell
-git clone <your-repo-url>
-cd event_management_api
+git clone https://github.com/rajeshmsi2308/event-management-system-api.git
+cd event-management-system-api
 ```
 
 ### 3. Create and activate a virtual environment
@@ -111,7 +111,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES=60
 python init_db.py
 python create_admin.py
 ```
-Default admin: `admin@events.com` / `Admin@123` (change it after first login).
+Default admins: `admin@gmail.com` and `admin1@gmail.com`, password `admin123` (change it after first login).
 
 ### 8. Run the server
 ```powershell
@@ -209,3 +209,4 @@ GET /api/events?q=python&category=Technology&min_price=100&max_price=1000&sort_b
 
 - pytest: **12 passed**
 - Postman: **68 / 68 checks passed**
+@
